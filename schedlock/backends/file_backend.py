@@ -85,16 +85,26 @@ class FileBackend(BaseBackend):
         except (json.JSONDecodeError, OSError):
             return False
 
-    def is_locked(self, job_name: str) -> bool:
+    def get_lock_info(self, job_name: str) -> Optional[dict]:
+        """
+        Return current lock metadata for the given job, or None if not locked.
+
+        :param job_name: Unique name of the cron job.
+        :return: Dict with owner, acquired_at, and expires_at, or None if no active lock.
+        """
         lock_path = self._lock_path(job_name)
         if not os.path.exists(lock_path):
-            return False
+            return None
         try:
             with open(lock_path, "r") as fd:
+                fcntl.flock(fd, fcntl.LOCK_SH)
                 content = fd.read().strip()
-                if not content:
-                    return False
-                data = json.loads(content)
-                return time.time() < data.get("expires_at", 0)
+                fcntl.flock(fd, fcntl.LOCK_UN)
+            if not content:
+                return None
+            data = json.loads(content)
+            if time.time() >= data.get("expires_at", 0):
+                return None
+            return data
         except (json.JSONDecodeError, OSError):
-            return False
+            return None
