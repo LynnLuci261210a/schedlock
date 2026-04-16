@@ -1,53 +1,52 @@
 """Abstract base class for schedlock backends."""
 
-from __future__ import annotations
-
 from abc import ABC, abstractmethod
+from contextlib import contextmanager
 from typing import Optional
-
-from schedlock.utils import default_owner
 
 
 class BaseBackend(ABC):
-    """Base class that all schedlock backends must implement."""
+    """Base class all backends must inherit from."""
 
     @abstractmethod
-    def acquire(self, job_name: str, ttl: int = 300, owner: Optional[str] = None) -> bool:
-        """Attempt to acquire the lock for *job_name*.
-
-        Returns True if the lock was acquired, False if it is already held.
-        """
+    def acquire(self, lock_key: str, owner: str, ttl: int) -> bool:
+        """Attempt to acquire a lock. Returns True if successful."""
+        raise NotImplementedError
 
     @abstractmethod
-    def release(self, job_name: str, owner: Optional[str] = None) -> bool:
-        """Release the lock for *job_name*.
-
-        Returns True if the lock was released, False if it was not held by *owner*.
-        """
+    def release(self, lock_key: str, owner: str) -> bool:
+        """Release a lock owned by owner. Returns True if released."""
+        raise NotImplementedError
 
     @abstractmethod
-    def is_locked(self, job_name: str) -> bool:
-        """Return True if *job_name* is currently locked."""
+    def is_locked(self, lock_key: str) -> bool:
+        """Return True if the lock is currently held."""
+        raise NotImplementedError
 
-    def lock(self, job_name: str, ttl: int = 300, owner: Optional[str] = None, skip_on_locked: bool = True):
-        """Return a :class:`~schedlock.context.LockContext` for *job_name*.
+    def refresh(self, lock_key: str, owner: str, ttl: int) -> bool:
+        """Refresh the TTL of an existing lock owned by owner.
 
-        This is a convenience method so backends can be used directly as
-        context managers::
+        Default implementation: release and re-acquire (not atomic).
+        Backends should override this with an atomic version where possible.
 
-            with backend.lock("my-job", ttl=60) as acquired:
-                if acquired:
-                    do_work()
+        Returns True if the lock was successfully refreshed.
         """
-        from schedlock.context import LockContext
+        if not self.is_locked(lock_key):
+            return False
+        released = self.release(lock_key, owner)
+        if not released:
+            return False
+        return self.acquire(lock_key, owner, ttl)
 
-        return LockContext(
-            self,
-            job_name,
-            ttl=ttl,
-            owner=owner or default_owner(),
-            skip_on_locked=skip_on_locked,
-        )
+    @contextmanager
+    def lock(self, lock_key: str, owner: str, ttl: int):
+        """Context manager that acquires and releases a lock.
 
-    def __repr__(self) -> str:
-        return f"{self.__class__.__name__}()"
+        Yields True if acquired, False otherwise.
+        """
+        acquired = self.acquire(lock_key, owner, ttl)
+        try:
+            yield acquired
+        finally:
+            if acquired:
+                self.release(lock_key, owner)
