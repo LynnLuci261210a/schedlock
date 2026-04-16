@@ -41,7 +41,10 @@ class LockContext:
 
     def __exit__(self, exc_type, exc_val, exc_tb) -> bool:
         if self._acquired:
-            self.backend.release(self.job_name, owner=self.owner)
+            try:
+                self.backend.release(self.job_name, owner=self.owner)
+            finally:
+                self._acquired = False
         # Do not suppress exceptions
         return False
 
