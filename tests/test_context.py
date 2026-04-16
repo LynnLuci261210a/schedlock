@@ -50,6 +50,17 @@ def test_acquired_property_reflects_state(mock_backend):
         assert ctx.acquired is True
 
 
+def test_acquired_is_false_after_context_exits(mock_backend):
+    """Ensure acquired resets to False after the context manager exits normally."""
+    mock_backend.acquire.return_value = True
+    ctx = LockContext(mock_backend, "my-job", owner="owner-1")
+
+    with ctx:
+        assert ctx.acquired is True
+
+    assert ctx.acquired is False
+
+
 def test_default_owner_is_set_when_none(mock_backend):
     mock_backend.acquire.return_value = True
     ctx = LockContext(mock_backend, "my-job")
