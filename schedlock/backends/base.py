@@ -39,8 +39,15 @@ class BaseBackend(ABC):
         return self.acquire(lock_key, owner, ttl)
 
     @contextmanager
-    def lock(self, lock_key: str, owner: str, ttl: int):
+    def lock(self, lock_key: str, owner: str, ttl: int, blocking: bool = True):
         """Context manager that acquires and releases a lock.
+
+        Args:
+            lock_key: The key identifying the lock.
+            owner: A unique identifier for the lock owner.
+            ttl: Time-to-live for the lock in seconds.
+            blocking: If False, do not retry acquisition; yield False immediately
+                if the lock cannot be acquired.
 
         Yields True if acquired, False otherwise.
         """
