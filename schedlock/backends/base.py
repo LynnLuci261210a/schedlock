@@ -38,6 +38,14 @@ class BaseBackend(ABC):
             return False
         return self.acquire(lock_key, owner, ttl)
 
+    def get_owner(self, lock_key: str) -> Optional[str]:
+        """Return the current owner of the lock, or None if not locked.
+
+        Backends may override this to provide owner introspection.
+        The default implementation returns None unconditionally.
+        """
+        return None
+
     @contextmanager
     def lock(self, lock_key: str, owner: str, ttl: int, blocking: bool = True):
         """Context manager that acquires and releases a lock.
