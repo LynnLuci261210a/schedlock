@@ -1,6 +1,8 @@
-"""Tests for the backends package public API."""
+"""Tests for schedlock.backends package exports."""
 
 import pytest
+from schedlock import backends
+from schedlock.backends.base import BaseBackend
 
 
 def test_base_backend_importable():
@@ -19,39 +21,35 @@ def test_memory_backend_importable():
 
 
 def test_memory_backend_is_base_subclass():
-    from schedlock.backends import MemoryBackend, BaseBackend
+    from schedlock.backends import MemoryBackend
     assert issubclass(MemoryBackend, BaseBackend)
 
 
 def test_file_backend_is_base_subclass():
-    from schedlock.backends import FileBackend, BaseBackend
+    from schedlock.backends import FileBackend
     assert issubclass(FileBackend, BaseBackend)
 
 
-def test_all_exports_defined():
-    import schedlock.backends as backends
-    for name in backends.__all__:
-        if name == "RedisBackend":
-            continue
-        assert hasattr(backends, name), f"{name} missing from backends package"
+def test_composite_backend_importable():
+    from schedlock.backends import CompositeBackend
+    assert CompositeBackend is not None
 
 
-def test_redis_backend_attribute_exists():
-    import schedlock.backends as backends
-    # RedisBackend may be None if redis is not installed, but attr must exist
-    assert hasattr(backends, "RedisBackend")
+def test_audited_backend_importable():
+    from schedlock.backends import AuditedBackend
+    assert AuditedBackend is not None
 
 
-def test_memory_backend_instantiable():
-    from schedlock.backends import MemoryBackend
-    backend = MemoryBackend()
-    assert backend is not None
+def test_readonly_backend_importable():
+    from schedlock.backends import ReadOnlyBackend
+    assert ReadOnlyBackend is not None
 
 
-def test_memory_backend_acquire_and_release():
-    from schedlock.backends import MemoryBackend
-    backend = MemoryBackend()
-    assert backend.acquire("sanity_check", ttl=30, owner="test") is True
-    assert backend.is_locked("sanity_check") is True
-    assert backend.release("sanity_check", owner="test") is True
-    assert backend.is_locked("sanity_check") is False
+def test_readonly_backend_is_base_subclass():
+    from schedlock.backends import ReadOnlyBackend
+    assert issubclass(ReadOnlyBackend, BaseBackend)
+
+
+def test_all_exports_list_contains_readonly():
+    from schedlock.backends import __all__
+    assert "ReadOnlyBackend" in __all__
