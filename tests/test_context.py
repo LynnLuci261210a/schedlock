@@ -82,3 +82,11 @@ def test_exception_not_suppressed(mock_backend):
     with pytest.raises(RuntimeError, match="expected error"):
         with LockContext(mock_backend, "job", owner="o"):
             raise RuntimeError("expected error")
+
+
+def test_release_not_called_when_acquire_not_called(mock_backend):
+    """Ensure release is not called if the context was never entered."""
+    ctx = LockContext(mock_backend, "my-job", owner="owner-1")
+    # Never enter the context manager
+    mock_backend.acquire.assert_not_called()
+    mock_backend.release.assert_not_called()
