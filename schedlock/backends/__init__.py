@@ -1,6 +1,8 @@
+"""Backend registry for schedlock."""
+
 from schedlock.backends.base import BaseBackend
-from schedlock.backends.file_backend import FileBackend
 from schedlock.backends.memory_backend import MemoryBackend
+from schedlock.backends.file_backend import FileBackend
 from schedlock.backends.composite import CompositeBackend
 from schedlock.backends.audited_backend import AuditedBackend
 from schedlock.backends.quota_backend import QuotaBackend
@@ -10,16 +12,19 @@ from schedlock.backends.ttl_backend import TTLCapBackend
 from schedlock.backends.tagged_backend import TaggedBackend
 from schedlock.backends.namespaced_backend import NamespacedBackend
 from schedlock.backends.fallback_backend import FallbackBackend
+from schedlock.backends.retry_backend import RetryBackend
+from schedlock.backends.cached_backend import CachedBackend
 
 try:
     from schedlock.backends.redis_backend import RedisBackend
-except ImportError:
+except ImportError:  # pragma: no cover
     RedisBackend = None  # type: ignore
 
 __all__ = [
     "BaseBackend",
-    "FileBackend",
     "MemoryBackend",
+    "FileBackend",
+    "RedisBackend",
     "CompositeBackend",
     "AuditedBackend",
     "QuotaBackend",
@@ -29,5 +34,6 @@ __all__ = [
     "TaggedBackend",
     "NamespacedBackend",
     "FallbackBackend",
-    "RedisBackend",
+    "RetryBackend",
+    "CachedBackend",
 ]
