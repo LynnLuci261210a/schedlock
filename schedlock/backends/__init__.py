@@ -17,11 +17,12 @@ from schedlock.backends.cached_backend import CachedBackend
 from schedlock.backends.metrics_backend import MetricsBackend
 from schedlock.backends.logging_backend import LoggingBackend
 from schedlock.backends.circuit_breaker_backend import CircuitBreakerBackend
+from schedlock.backends.expiring_backend import ExpiringBackend
 
 try:
     from schedlock.backends.redis_backend import RedisBackend
 except ImportError:  # pragma: no cover
-    RedisBackend = None  # type: ignore
+    RedisBackend = None  # type: ignore[assignment,misc]
 
 __all__ = [
     "BaseBackend",
@@ -41,5 +42,6 @@ __all__ = [
     "MetricsBackend",
     "LoggingBackend",
     "CircuitBreakerBackend",
+    "ExpiringBackend",
     "RedisBackend",
 ]

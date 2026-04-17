@@ -1,76 +1,75 @@
-"""Tests for schedlock.backends package exports."""
+"""Tests for schedlock.backends package imports."""
 
 import pytest
-from schedlock.backends.base import BaseBackend
+
+from schedlock.backends import (
+    BaseBackend,
+    MemoryBackend,
+    FileBackend,
+    CompositeBackend,
+    AuditedBackend,
+    QuotaBackend,
+    RateLimitedBackend,
+    ReadOnlyBackend,
+    TTLCapBackend,
+    TaggedBackend,
+    NamespacedBackend,
+    FallbackBackend,
+    RetryBackend,
+    CachedBackend,
+    MetricsBackend,
+    LoggingBackend,
+    CircuitBreakerBackend,
+    ExpiringBackend,
+)
 
 
 def test_base_backend_importable():
-    from schedlock.backends import BaseBackend
     assert BaseBackend is not None
 
 
 def test_file_backend_importable():
-    from schedlock.backends import FileBackend
     assert FileBackend is not None
 
 
 def test_memory_backend_importable():
-    from schedlock.backends import MemoryBackend
     assert MemoryBackend is not None
 
 
 def test_memory_backend_is_base_subclass():
-    from schedlock.backends import MemoryBackend
     assert issubclass(MemoryBackend, BaseBackend)
 
 
 def test_file_backend_is_base_subclass():
-    from schedlock.backends import FileBackend
     assert issubclass(FileBackend, BaseBackend)
 
 
+def test_expiring_backend_importable():
+    assert ExpiringBackend is not None
+
+
+def test_expiring_backend_is_base_subclass():
+    assert issubclass(ExpiringBackend, BaseBackend)
+
+
 def test_composite_backend_importable():
-    from schedlock.backends import CompositeBackend
     assert CompositeBackend is not None
 
 
-def test_fallback_backend_importable():
-    from schedlock.backends import FallbackBackend
-    assert FallbackBackend is not None
+def test_metrics_backend_importable():
+    assert MetricsBackend is not None
 
 
-def test_fallback_backend_is_base_subclass():
-    from schedlock.backends import FallbackBackend
-    assert issubclass(FallbackBackend, BaseBackend)
+def test_circuit_breaker_backend_importable():
+    assert CircuitBreakerBackend is not None
 
 
-def test_namespaced_backend_importable():
-    from schedlock.backends import NamespacedBackend
-    assert NamespacedBackend is not None
-
-
-def test_tagged_backend_importable():
-    from schedlock.backends import TaggedBackend
-    assert TaggedBackend is not None
-
-
-def test_ttl_cap_backend_importable():
-    from schedlock.backends import TTLCapBackend
-    assert TTLCapBackend is not None
-
-
-def test_readonly_backend_importable():
-    from schedlock.backends import ReadOnlyBackend
-    assert ReadOnlyBackend is not None
-
-
-def test_all_exports_are_base_subclasses():
-    from schedlock.backends import (
-        MemoryBackend, FileBackend, CompositeBackend,
-        AuditedBackend, ReadOnlyBackend, TTLCapBackend,
-        TaggedBackend, NamespacedBackend, FallbackBackend,
-    )
-    for cls in [MemoryBackend, FileBackend, CompositeBackend,
-                AuditedBackend, ReadOnlyBackend, TTLCapBackend,
-                TaggedBackend, NamespacedBackend, FallbackBackend]:
-        assert issubclass(cls, BaseBackend), f"{cls.__name__} is not a BaseBackend subclass"
+def test_all_wrappers_are_base_subclasses():
+    wrappers = [
+        CompositeBackend, AuditedBackend, QuotaBackend, RateLimitedBackend,
+        ReadOnlyBackend, TTLCapBackend, TaggedBackend, NamespacedBackend,
+        FallbackBackend, RetryBackend, CachedBackend, MetricsBackend,
+        LoggingBackend, CircuitBreakerBackend, ExpiringBackend,
+    ]
+    for cls in wrappers:
+        assert issubclass(cls, BaseBackend), f"{cls.__name__} not a BaseBackend subclass"
