@@ -14,6 +14,9 @@ from schedlock.backends.namespaced_backend import NamespacedBackend
 from schedlock.backends.fallback_backend import FallbackBackend
 from schedlock.backends.retry_backend import RetryBackend
 from schedlock.backends.cached_backend import CachedBackend
+from schedlock.backends.metrics_backend import MetricsBackend
+from schedlock.backends.logging_backend import LoggingBackend
+from schedlock.backends.circuit_breaker_backend import CircuitBreakerBackend
 
 try:
     from schedlock.backends.redis_backend import RedisBackend
@@ -24,7 +27,6 @@ __all__ = [
     "BaseBackend",
     "MemoryBackend",
     "FileBackend",
-    "RedisBackend",
     "CompositeBackend",
     "AuditedBackend",
     "QuotaBackend",
@@ -36,4 +38,8 @@ __all__ = [
     "FallbackBackend",
     "RetryBackend",
     "CachedBackend",
+    "MetricsBackend",
+    "LoggingBackend",
+    "CircuitBreakerBackend",
+    "RedisBackend",
 ]
