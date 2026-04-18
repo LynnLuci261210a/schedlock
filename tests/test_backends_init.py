@@ -1,11 +1,9 @@
-"""Tests for schedlock.backends package imports."""
-
 import pytest
-
 from schedlock.backends import (
     BaseBackend,
     MemoryBackend,
     FileBackend,
+    RedisBackend,
     CompositeBackend,
     AuditedBackend,
     QuotaBackend,
@@ -21,6 +19,20 @@ from schedlock.backends import (
     LoggingBackend,
     CircuitBreakerBackend,
     ExpiringBackend,
+    PrefixedBackend,
+    EncryptedBackend,
+    SnapshotBackend,
+    ThrottledBackend,
+    PrioritizedBackend,
+    ConditionalBackend,
+    ObservableBackend,
+    DebounceBackend,
+    ShadowBackend,
+    TimedBackend,
+    SamplingBackend,
+    ValidatingBackend,
+    CoalescingBackend,
+    VersionedBackend,
 )
 
 
@@ -44,24 +56,12 @@ def test_file_backend_is_base_subclass():
     assert issubclass(FileBackend, BaseBackend)
 
 
-def test_expiring_backend_importable():
-    assert ExpiringBackend is not None
+def test_versioned_backend_importable():
+    assert VersionedBackend is not None
 
 
-def test_expiring_backend_is_base_subclass():
-    assert issubclass(ExpiringBackend, BaseBackend)
-
-
-def test_composite_backend_importable():
-    assert CompositeBackend is not None
-
-
-def test_metrics_backend_importable():
-    assert MetricsBackend is not None
-
-
-def test_circuit_breaker_backend_importable():
-    assert CircuitBreakerBackend is not None
+def test_versioned_backend_is_base_subclass():
+    assert issubclass(VersionedBackend, BaseBackend)
 
 
 def test_all_wrappers_are_base_subclasses():
@@ -69,7 +69,11 @@ def test_all_wrappers_are_base_subclasses():
         CompositeBackend, AuditedBackend, QuotaBackend, RateLimitedBackend,
         ReadOnlyBackend, TTLCapBackend, TaggedBackend, NamespacedBackend,
         FallbackBackend, RetryBackend, CachedBackend, MetricsBackend,
-        LoggingBackend, CircuitBreakerBackend, ExpiringBackend,
+        LoggingBackend, CircuitBreakerBackend, ExpiringBackend, PrefixedBackend,
+        EncryptedBackend, SnapshotBackend, ThrottledBackend, PrioritizedBackend,
+        ConditionalBackend, ObservableBackend, DebounceBackend, ShadowBackend,
+        TimedBackend, SamplingBackend, ValidatingBackend, CoalescingBackend,
+        VersionedBackend,
     ]
     for cls in wrappers:
         assert issubclass(cls, BaseBackend), f"{cls.__name__} not a BaseBackend subclass"

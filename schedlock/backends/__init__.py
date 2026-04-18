@@ -1,8 +1,7 @@
-"""Public exports for schedlock backends."""
-
 from schedlock.backends.base import BaseBackend
 from schedlock.backends.memory_backend import MemoryBackend
 from schedlock.backends.file_backend import FileBackend
+from schedlock.backends.redis_backend import RedisBackend
 from schedlock.backends.composite import CompositeBackend
 from schedlock.backends.audited_backend import AuditedBackend
 from schedlock.backends.quota_backend import QuotaBackend
@@ -21,11 +20,17 @@ from schedlock.backends.expiring_backend import ExpiringBackend
 from schedlock.backends.prefixed_backend import PrefixedBackend
 from schedlock.backends.encrypted_backend import EncryptedBackend
 from schedlock.backends.snapshot_backend import SnapshotBackend
-
-try:
-    from schedlock.backends.redis_backend import RedisBackend
-except ImportError:  # pragma: no cover
-    RedisBackend = None  # type: ignore
+from schedlock.backends.throttled_backend import ThrottledBackend
+from schedlock.backends.prioritized_backend import PrioritizedBackend
+from schedlock.backends.conditional_backend import ConditionalBackend
+from schedlock.backends.observable_backend import ObservableBackend
+from schedlock.backends.debounce_backend import DebounceBackend
+from schedlock.backends.shadow_backend import ShadowBackend
+from schedlock.backends.timed_backend import TimedBackend
+from schedlock.backends.sampling_backend import SamplingBackend
+from schedlock.backends.validating_backend import ValidatingBackend
+from schedlock.backends.coalescing_backend import CoalescingBackend
+from schedlock.backends.versioned_backend import VersionedBackend
 
 __all__ = [
     "BaseBackend",
@@ -50,4 +55,15 @@ __all__ = [
     "PrefixedBackend",
     "EncryptedBackend",
     "SnapshotBackend",
+    "ThrottledBackend",
+    "PrioritizedBackend",
+    "ConditionalBackend",
+    "ObservableBackend",
+    "DebounceBackend",
+    "ShadowBackend",
+    "TimedBackend",
+    "SamplingBackend",
+    "ValidatingBackend",
+    "CoalescingBackend",
+    "VersionedBackend",
 ]
