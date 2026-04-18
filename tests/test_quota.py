@@ -107,3 +107,8 @@ def test_quota_backend_delegates_release(backend, mock_inner):
 def test_quota_backend_delegates_is_locked(backend, mock_inner):
     backend.is_locked("job")
     mock_inner.is_locked.assert_called_once_with("job")
+
+
+def test_quota_backend_delegates_refresh(backend, mock_inner):
+    backend.refresh("job", "owner", 30)
+    mock_inner.refresh.assert_called_once_with("job", "owner", 30)
