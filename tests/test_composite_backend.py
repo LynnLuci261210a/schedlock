@@ -86,3 +86,13 @@ def test_refresh_returns_false_when_any_fails():
     b2 = make_backend(refresh_ret=False)
     comp = CompositeBackend([b1, b2])
     assert comp.refresh("job", "owner", 60) is False
+
+
+def test_refresh_calls_all_backends():
+    """Ensure refresh is attempted on all backends even if one returns False."""
+    b1 = make_backend(refresh_ret=False)
+    b2 = make_backend(refresh_ret=True)
+    comp = CompositeBackend([b1, b2])
+    comp.refresh("job", "owner", 60)
+    b1.refresh.assert_called_once_with("job", "owner", 60)
+    b2.refresh.assert_called_once_with("job", "owner", 60)
