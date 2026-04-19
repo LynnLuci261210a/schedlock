@@ -1,4 +1,4 @@
-"""Backend registry for schedlock."""
+"""Backend registry and imports for schedlock."""
 from schedlock.backends.base import BaseBackend
 from schedlock.backends.memory_backend import MemoryBackend
 from schedlock.backends.file_backend import FileBackend
@@ -37,6 +37,7 @@ from schedlock.backends.scoring_backend import ScoringBackend
 from schedlock.backends.jitter_backend import JitterBackend
 from schedlock.backends.rotating_backend import RotatingBackend
 from schedlock.backends.deadline_backend import DeadlineBackend
+from schedlock.backends.capped_backend import CappedBackend
 
 __all__ = [
     "BaseBackend",
@@ -77,4 +78,5 @@ __all__ = [
     "JitterBackend",
     "RotatingBackend",
     "DeadlineBackend",
+    "CappedBackend",
 ]
