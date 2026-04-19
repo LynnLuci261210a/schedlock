@@ -46,3 +46,14 @@ class DebounceBackend(BaseBackend):
 
     def refresh(self, key: str, owner: str, ttl: int) -> bool:
         return self._inner.refresh(key, owner, ttl)
+
+    def remaining_cooldown(self, key: str) -> float:
+        """Return the remaining cooldown time in seconds for the given key.
+
+        Returns 0.0 if the key is not in the cooldown window.
+        """
+        last = self._last_acquired.get(key)
+        if last is None:
+            return 0.0
+        remaining = self._cooldown - (time() - last)
+        return max(0.0, remaining)
