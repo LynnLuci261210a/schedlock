@@ -72,3 +72,13 @@ def test_zero_jitter_does_not_add_random(backend):
             retry_acquire(backend, "my_job", ttl=60, retries=2, delay=0.5, jitter=0.0)
     mock_rand.assert_not_called()
     mock_sleep.assert_called_once_with(0.5)
+
+
+def test_acquire_raises_exception_propagates(backend):
+    """Exceptions from the backend should propagate immediately without retrying."""
+    backend.acquire.side_effect = RuntimeError("connection lost")
+    with patch("schedlock.retry.time.sleep") as mock_sleep:
+        with pytest.raises(RuntimeError, match="connection lost"):
+            retry_acquire(backend, "my_job", ttl=60, retries=3, delay=0.1)
+    assert backend.acquire.call_count == 1
+    mock_sleep.assert_not_called()
