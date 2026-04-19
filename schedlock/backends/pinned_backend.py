@@ -32,6 +32,13 @@ class PinnedBackend(BaseBackend):
     def allowed_owners(self) -> frozenset[str]:
         return self._allowed
 
+    def _check_owner(self, owner: str) -> None:
+        """Raise ValueError if owner is not in the allowed set."""
+        if owner not in self._allowed:
+            raise ValueError(
+                f"Owner {owner!r} is not in the allowed set: {self._allowed}"
+            )
+
     def acquire(self, key: str, owner: str, ttl: int) -> bool:
         if owner not in self._allowed:
             return False
@@ -49,3 +56,13 @@ class PinnedBackend(BaseBackend):
         if owner not in self._allowed:
             return False
         return self._inner.refresh(key, owner, ttl)
+
+    def get_current_owner(self, key: str) -> Optional[str]:
+        """Return the current owner of the lock, or None if not locked.
+
+        Delegates to the inner backend's get_current_owner if available.
+
+        Returns:
+            The owner string if the key is locked, otherwise None.
+        """
+        return self._inner.get_current_owner(key)
