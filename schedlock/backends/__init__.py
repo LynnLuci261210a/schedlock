@@ -1,8 +1,7 @@
-"""Backend registry for schedlock."""
-
+"""Public API for schedlock backends."""
 from schedlock.backends.base import BaseBackend
-from schedlock.backends.memory_backend import MemoryBackend
 from schedlock.backends.file_backend import FileBackend
+from schedlock.backends.memory_backend import MemoryBackend
 from schedlock.backends.redis_backend import RedisBackend
 from schedlock.backends.composite import CompositeBackend
 from schedlock.backends.audited_backend import AuditedBackend
@@ -43,11 +42,18 @@ from schedlock.backends.sticky_backend import StickyBackend
 from schedlock.backends.bulkhead_backend import BulkheadBackend
 from schedlock.backends.leaky_bucket_backend import LeakyBucketBackend
 from schedlock.backends.window_backend import WindowBackend
+from schedlock.backends.blacklist_backend import BlacklistBackend
+from schedlock.backends.immutable_backend import ImmutableBackend
+from schedlock.backends.cooldown_backend import CooldownBackend
+from schedlock.backends.tenant_backend import TenantBackend
+from schedlock.backends.expiry_policy_backend import ExpiryPolicyBackend
+from schedlock.backends.once_backend import OnceBackend
+from schedlock.backends.budget_backend import BudgetBackend
 
 __all__ = [
     "BaseBackend",
-    "MemoryBackend",
     "FileBackend",
+    "MemoryBackend",
     "RedisBackend",
     "CompositeBackend",
     "AuditedBackend",
@@ -88,4 +94,10 @@ __all__ = [
     "BulkheadBackend",
     "LeakyBucketBackend",
     "WindowBackend",
-]
+    "BlacklistBackend",
+    "ImmutableBackend",
+    "CooldownBackend",
+    "TenantBackend",
+    "ExpiryPolicyBackend",
+    "OnceBackend",
+    "n]
