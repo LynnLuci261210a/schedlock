@@ -45,3 +45,9 @@ class RetryBackend(BaseBackend):
 
     def refresh(self, key: str, owner: str, ttl: int) -> bool:
         return self._inner.refresh(key, owner, ttl)
+
+    def __repr__(self) -> str:
+        return (
+            f"RetryBackend(inner={self._inner!r}, retries={self._retries}, "
+            f"delay={self._delay}, backoff={self._backoff})"
+        )
