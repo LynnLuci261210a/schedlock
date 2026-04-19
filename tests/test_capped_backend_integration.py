@@ -43,3 +43,14 @@ def test_capped_over_namespaced(memory):
     assert b.acquire("deploy", "cd", 120) is False
     b.release("deploy", "ci")
     assert b.acquire("deploy", "cd", 120) is True
+
+
+def test_release_by_non_holder_does_not_unlock(memory):
+    """Releasing a lock with a worker_id that never acquired it should have no effect."""
+    b = CappedBackend(memory, max_holders=1)
+    b.acquire("task", "w1", 60)
+    assert b.release("task", "w_unknown") is False
+    assert b.is_locked("task") is True
+    # original holder can still release
+    assert b.release("task", "w1") is True
+    assert b.is_locked("task") is False
