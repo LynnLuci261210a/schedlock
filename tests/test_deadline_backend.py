@@ -77,3 +77,12 @@ def test_acquire_at_exact_deadline_blocked(inner):
     dl = time.time() - 0.001
     b = DeadlineBackend(inner, deadline=dl)
     assert b.acquire("job", "owner1", 60) is False
+
+
+def test_refresh_blocked_after_deadline(inner):
+    """refresh should not delegate to inner when the deadline has passed."""
+    past = time.time() - 1
+    b = DeadlineBackend(inner, deadline=past)
+    result = b.refresh("job", "owner1", 30)
+    assert result is False
+    inner.refresh.assert_not_called()
