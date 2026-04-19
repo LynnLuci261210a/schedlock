@@ -79,6 +79,15 @@ def test_is_locked_delegates(backend):
     assert backend.is_locked("job") is True
 
 
+def test_is_locked_false_when_not_acquired(backend):
+    assert backend.is_locked("job") is False
+
+
 def test_refresh_delegates(backend):
     backend.acquire("job", "owner-1", 60)
     assert backend.refresh("job", "owner-1", 120) is True
+
+
+def test_refresh_fails_without_acquire(backend):
+    # Refreshing a lock that was never acquired should return False
+    assert backend.refresh("job", "owner-1", 120) is False
