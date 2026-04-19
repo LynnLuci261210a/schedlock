@@ -99,8 +99,10 @@ def test_refresh_delegates_to_owning_backend():
     b2.refresh.assert_not_called()
 
 
-def test_refresh_returns_false_for_unknown_key():
-    b1 = make_backend()
-    rb = RotatingBackend([b1])
-    result = rb.refresh("ghost", "owner", 30)
+def test_refresh_returns_false_when_no_owning_backend():
+    b1, b2 = make_backend(), make_backend()
+    rb = RotatingBackend([b1, b2])
+    result = rb.refresh("unknown_job", "owner", 60)
     assert result is False
+    b1.refresh.assert_not_called()
+    b2.refresh.assert_not_called()
