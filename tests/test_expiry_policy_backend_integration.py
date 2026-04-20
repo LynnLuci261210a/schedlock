@@ -45,3 +45,13 @@ def test_policy_over_namespaced(memory):
     assert backend.is_locked("report") is True
     assert backend.release("report", "w1") is True
     assert backend.is_locked("report") is False
+
+
+def test_release_by_non_owner_does_not_unlock(memory):
+    """A worker that does not own the lock should not be able to release it."""
+    backend = ExpiryPolicyBackend(memory, policy=lambda k, o: 60)
+    backend.acquire("job", "w1", ttl=0)
+    # w2 attempts to release a lock it does not own
+    assert backend.release("job", "w2") is False
+    # lock should still be held by w1
+    assert backend.is_locked("job") is True
