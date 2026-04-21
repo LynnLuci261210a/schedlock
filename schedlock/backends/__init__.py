@@ -1,16 +1,9 @@
-"""Public API for schedlock backends."""
+"""schedlock.backends — public re-exports for all backend classes."""
 from schedlock.backends.base import BaseBackend
-from schedlock.backends.file_backend import FileBackend
 from schedlock.backends.memory_backend import MemoryBackend
+from schedlock.backends.file_backend import FileBackend
 from schedlock.backends.redis_backend import RedisBackend
 from schedlock.backends.composite import CompositeBackend
-from schedlock.backends.audited_backend import AuditedBackend
-from schedlock.backends.quota_backend import QuotaBackend
-from schedlock.backends.ratelimited_backend import RateLimitedBackend
-from schedlock.backends.readonly_backend import ReadOnlyBackend
-from schedlock.backends.ttl_backend import TTLCapBackend
-from schedlock.backends.tagged_backend import TaggedBackend
-from schedlock.backends.namespaced_backend import NamespacedBackend
 from schedlock.backends.fallback_backend import FallbackBackend
 from schedlock.backends.retry_backend import RetryBackend
 from schedlock.backends.cached_backend import CachedBackend
@@ -42,6 +35,7 @@ from schedlock.backends.sticky_backend import StickyBackend
 from schedlock.backends.bulkhead_backend import BulkheadBackend
 from schedlock.backends.leaky_bucket_backend import LeakyBucketBackend
 from schedlock.backends.window_backend import WindowBackend
+from schedlock.backends.quota_backend import QuotaBackend
 from schedlock.backends.blacklist_backend import BlacklistBackend
 from schedlock.backends.immutable_backend import ImmutableBackend
 from schedlock.backends.cooldown_backend import CooldownBackend
@@ -49,20 +43,33 @@ from schedlock.backends.tenant_backend import TenantBackend
 from schedlock.backends.expiry_policy_backend import ExpiryPolicyBackend
 from schedlock.backends.once_backend import OnceBackend
 from schedlock.backends.budget_backend import BudgetBackend
+from schedlock.backends.checkpoint_backend import CheckpointBackend
+from schedlock.backends.watermark_backend import WatermarkBackend
+from schedlock.backends.labeled_backend import LabeledBackend
+from schedlock.backends.tagging_policy_backend import TaggingPolicyBackend
+from schedlock.backends.replay_backend import ReplayBackend
+from schedlock.backends.staggered_backend import StaggeredBackend
+from schedlock.backends.sharded_backend import ShardedBackend
+from schedlock.backends.aging_backend import AgingBackend
+from schedlock.backends.warmup_backend import WarmupBackend
+from schedlock.backends.tiered_backend import TieredBackend
+from schedlock.backends.draining_backend import DrainingBackend
+from schedlock.backends.circuit_retry_backend import CircuitRetryBackend
+from schedlock.backends.fallthrough_backend import FallthroughBackend
+from schedlock.backends.namespaced_backend import NamespacedBackend
+from schedlock.backends.tagged_backend import TaggedBackend
+from schedlock.backends.audited_backend import AuditedBackend
+from schedlock.backends.ratelimited_backend import RateLimitedBackend
+from schedlock.backends.readonly_backend import ReadOnlyBackend
+from schedlock.backends.ttl_backend import TTLCapBackend
+from schedlock.backends.expiring_owner_backend import ExpiringOwnerBackend
 
 __all__ = [
     "BaseBackend",
-    "FileBackend",
     "MemoryBackend",
+    "FileBackend",
     "RedisBackend",
     "CompositeBackend",
-    "AuditedBackend",
-    "QuotaBackend",
-    "RateLimitedBackend",
-    "ReadOnlyBackend",
-    "TTLCapBackend",
-    "TaggedBackend",
-    "NamespacedBackend",
     "FallbackBackend",
     "RetryBackend",
     "CachedBackend",
@@ -94,10 +101,32 @@ __all__ = [
     "BulkheadBackend",
     "LeakyBucketBackend",
     "WindowBackend",
+    "QuotaBackend",
     "BlacklistBackend",
     "ImmutableBackend",
     "CooldownBackend",
     "TenantBackend",
     "ExpiryPolicyBackend",
     "OnceBackend",
-    "n]
+    "BudgetBackend",
+    "CheckpointBackend",
+    "WatermarkBackend",
+    "LabeledBackend",
+    "TaggingPolicyBackend",
+    "ReplayBackend",
+    "StaggeredBackend",
+    "ShardedBackend",
+    "AgingBackend",
+    "WarmupBackend",
+    "TieredBackend",
+    "DrainingBackend",
+    "CircuitRetryBackend",
+    "FallthroughBackend",
+    "NamespacedBackend",
+    "TaggedBackend",
+    "AuditedBackend",
+    "RateLimitedBackend",
+    "ReadOnlyBackend",
+    "TTLCapBackend",
+    "ExpiringOwnerBackend",
+]
