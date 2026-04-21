@@ -41,3 +41,18 @@ class TaggedBackend(BaseBackend):
     def locked_keys(self) -> List[str]:
         """Return all keys currently tracked as locked."""
         return list(self._lock_tags.keys())
+
+    def set_tag(self, key: str, tag_key: str, tag_value: str) -> None:
+        """Set or update a tag on an existing held lock.
+
+        Args:
+            key: The lock key to update.
+            tag_key: The tag name to set.
+            tag_value: The tag value to assign.
+
+        Raises:
+            KeyError: If the lock key is not currently tracked.
+        """
+        if key not in self._lock_tags:
+            raise KeyError(f"No active lock tracked for key: {key!r}")
+        self._lock_tags[key][tag_key] = tag_value
