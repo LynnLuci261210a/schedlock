@@ -81,6 +81,27 @@ class MemoryBackend(BaseBackend):
             entry = self._store.get(job_name)
             return entry is not None and now < entry["expires_at"]
 
+    def get_lock_info(self, job_name: str) -> Optional[dict]:
+        """Return metadata about an active lock, or None if not locked.
+
+        Args:
+            job_name: Unique identifier for the job.
+
+        Returns:
+            A dict with 'owner' and 'expires_at' keys if the lock is active,
+            or None if the lock does not exist or has expired.
+        """
+        now = time.time()
+        with self._lock:
+            entry = self._store.get(job_name)
+            if entry is None or now >= entry["expires_at"]:
+                return None
+            return {
+                "owner": entry["owner"],
+                "expires_at": entry["expires_at"],
+                "ttl_remaining": entry["expires_at"] - now,
+            }
+
     def _default_owner(self) -> str:
         import socket
         import os
