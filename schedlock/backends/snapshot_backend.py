@@ -53,6 +53,14 @@ class SnapshotBackend(BaseBackend):
     def clear_snapshots(self) -> None:
         self._snapshots.clear()
 
+    def latest_snapshot(self, job_name: Optional[str] = None) -> Optional[Snapshot]:
+        """Return the most recent snapshot, optionally filtered by job name.
+
+        Returns ``None`` if no matching snapshots exist.
+        """
+        snaps = self.snapshots(job_name)
+        return snaps[-1] if snaps else None
+
     def acquire(self, job_name: str, owner: str, ttl: int) -> bool:
         result = self._inner.acquire(job_name, owner, ttl)
         self._record("acquired" if result else "blocked", job_name, owner, result, ttl)
