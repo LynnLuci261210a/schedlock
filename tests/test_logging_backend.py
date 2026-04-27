@@ -80,3 +80,12 @@ def test_custom_log_level(inner, caplog):
     with caplog.at_level(logging.WARNING, logger="schedlock.backends.logging_backend"):
         b.acquire("job", "worker-1", 60)
     assert "acquired lock" in caplog.text
+
+
+def test_custom_log_level_below_threshold_suppresses_output(inner, caplog):
+    """Logs emitted at WARNING level should not appear when caplog is set to ERROR."""
+    b = LoggingBackend(inner, level=logging.WARNING)
+    inner.acquire.return_value = True
+    with caplog.at_level(logging.ERROR, logger="schedlock.backends.logging_backend"):
+        b.acquire("job", "worker-1", 60)
+    assert "acquired lock" not in caplog.text
