@@ -30,3 +30,15 @@ def test_gated_backend_has_expected_attrs():
     assert hasattr(b, "release")
     assert hasattr(b, "is_locked")
     assert hasattr(b, "refresh")
+
+
+def test_gated_backend_is_open_reflects_gate_fn():
+    """Verify that is_open delegates to the gate_fn at call time."""
+    inner = MemoryBackend()
+    gate_state = {"open": True}
+    b = GatedBackend(inner, gate_fn=lambda: gate_state["open"], reason="dynamic")
+
+    assert b.is_open() is True
+
+    gate_state["open"] = False
+    assert b.is_open() is False
